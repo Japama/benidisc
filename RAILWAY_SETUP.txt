@@ -10,39 +10,56 @@ He configurado la aplicación para desplegar **todo junto en un único servicio*
    - Ahora sirve los archivos estáticos compilados del frontend desde `/frontend/dist`
    - Redirige todas las rutas no-API a `index.html` (soporte para SPA)
 
-2. **Build script** (`backend/package.json`):
-   - `npm run build` compila automáticamente el frontend
+2. **Dockerfile mejorado**:
+   - Copia todo el código fuente (frontend y backend)
+   - Compila el frontend primero
+   - Instala dependencias del backend
+   - Inicia el servidor en puerto 3000
 
 3. **Configuración Railway**:
    - `Procfile`: Define cómo ejecutar la app
-   - `Dockerfile`: Imagen Docker para despliegue
-   - `railway.json`: Configuración específica de Railway
+   - `Dockerfile`: Imagen Docker completa para despliegue
 
 4. **Variables de entorno**:
-   - `.env.production` en backend y frontend (para producción)
-   - En Railway dashboard, establece: `JWT_SECRET`, `DATABASE_URL`, `NODE_ENV`
+   - `.env.example`: Template con todas las variables necesarias
+   - NO commitees archivos `.env*` locales (ya están en .gitignore)
+   - Railway lee las variables desde su dashboard
 
 ### 📋 Pasos para desplegar en Railway:
 
-1. **Crea un proyecto en Railway** (railway.app)
-2. **Conecta tu repositorio Git**
-3. **Añade PostgreSQL** (Railway lo proporciona automáticamente)
-4. **Configura variables de entorno**:
-   - `JWT_SECRET`: generar clave segura
-   - `DATABASE_URL`: Railway lo asigna automáticamente si añades PostgreSQL
-   - `NODE_ENV`: `production`
+1. **Push tu código a GitHub** (asegúrate de que Dockerfile y backend/package.json estén en el root)
 
-5. **Push a Git** → Railway compilará automáticamente
+2. **Crea un proyecto en Railroad** (railway.app):
+   - Conecta tu repositorio Git
+   - Railway detectará automáticamente el Dockerfile
+
+3. **Añade PostgreSQL** como servicio:
+   - Railway automáticamente asignará `DATABASE_URL`
+
+4. **Configura variables de entorno** en Railway dashboard:
+   ```
+   JWT_SECRET=tu-clave-segura-aqui
+   NODE_ENV=production
+   ```
+   
+   (DATABASE_URL se configura automáticamente si añades PostgreSQL)
+
+5. **Railway compilará y deployeará automáticamente**
 
 ### 🌐 URLs después de desplegar:
 
 - **Frontend**: `https://tu-railway-app.railway.app`
 - **API**: `https://tu-railway-app.railway.app/api/...`
 
-### ⚙️ Nota importante:
+### ✅ Verificación después de despliegue:
 
-El frontend en producción usa `/api` como base (relativa), así que automáticamente apuntará al backend sin necesidad de variables de entorno adicionales.
+- El frontend en producción usa `/api` como base (relativa)
+- Las llamadas a API se harán automáticamente al mismo servidor
+- No necesitas variables VITE_API_BASE_URL en producción
 
----
+### Notas importantes:
 
-¿Tienes dudas sobre el despliegue?
+- El PORT automáticamente se usa 3000 (configurable en Railway si es necesario)
+- Las imágenes cargadas se almacenan en `/backend/uploads`
+- Para persistencia, configura un volumen en Railway para `backend/uploads`
+- El `.env` local no se commitea (seguridad) - Railway usa su dashboard para variables
