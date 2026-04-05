@@ -1,0 +1,48 @@
+# Instrucciones de Despliegue en Railway
+
+## ✅ Tu app está lista para Railway
+
+He configurado la aplicación para desplegar **todo junto en un único servicio** de Railway:
+
+### Cambios realizados:
+
+1. **Backend actualizado** (`backend/index.js`):
+   - Ahora sirve los archivos estáticos compilados del frontend desde `/frontend/dist`
+   - Redirige todas las rutas no-API a `index.html` (soporte para SPA)
+
+2. **Build script** (`backend/package.json`):
+   - `npm run build` compila automáticamente el frontend
+
+3. **Configuración Railway**:
+   - `Procfile`: Define cómo ejecutar la app
+   - `Dockerfile`: Imagen Docker para despliegue
+   - `railway.json`: Configuración específica de Railway
+
+4. **Variables de entorno**:
+   - `.env.production` en backend y frontend (para producción)
+   - En Railway dashboard, establece: `JWT_SECRET`, `DATABASE_URL`, `NODE_ENV`
+
+### 📋 Pasos para desplegar en Railway:
+
+1. **Crea un proyecto en Railway** (railway.app)
+2. **Conecta tu repositorio Git**
+3. **Añade PostgreSQL** (Railway lo proporciona automáticamente)
+4. **Configura variables de entorno**:
+   - `JWT_SECRET`: generar clave segura
+   - `DATABASE_URL`: Railway lo asigna automáticamente si añades PostgreSQL
+   - `NODE_ENV`: `production`
+
+5. **Push a Git** → Railway compilará automáticamente
+
+### 🌐 URLs después de desplegar:
+
+- **Frontend**: `https://tu-railway-app.railway.app`
+- **API**: `https://tu-railway-app.railway.app/api/...`
+
+### ⚙️ Nota importante:
+
+El frontend en producción usa `/api` como base (relativa), así que automáticamente apuntará al backend sin necesidad de variables de entorno adicionales.
+
+---
+
+¿Tienes dudas sobre el despliegue?
