@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+const BACKEND_BASE = API_BASE.replace(/\/api\/?$/, '');
+
+function buildImageSrc(url) {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  return `${BACKEND_BASE}${url}`;
+}
 
 function Home() {
   const [news, setNews] = useState([]);
@@ -83,10 +90,16 @@ function Home() {
               news.map((item) => (
                 <article key={item.id} className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
                   {item.imageUrl ? (
-                    <img src={item.imageUrl} alt={item.title} className="h-48 w-full object-cover" />
-                  ) : (
-                    <div className="flex h-48 items-center justify-center bg-cyan-100 text-cyan-700">Sin imagen</div>
-                  )}
+                      <img
+                        src={buildImageSrc(item.imageUrl)}
+                        alt={item.title}
+                        className="h-48 w-full object-cover"
+                        loading="lazy"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="flex h-48 items-center justify-center bg-cyan-100 text-cyan-700">Sin imagen</div>
+                    )}
                   <div className="p-6">
                     <p className="text-sm uppercase tracking-[0.24em] text-cyan-600">Novedad</p>
                     <h3 className="mt-3 text-2xl font-semibold text-slate-950">{item.title}</h3>

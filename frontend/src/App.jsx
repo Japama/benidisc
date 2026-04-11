@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import Achievements from './pages/Achievements';
 import Tournaments from './pages/Tournaments';
 import Admin from './pages/Admin';
+import WhatIsUltimate from './pages/WhatIsUltimate';
+import Trainings from './pages/Trainings';
+import Events from './pages/Events';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/tournaments" element={<Tournaments />} />
+          <Route path="/eventos" element={<Events />} />
+          <Route path="/entrenamientos" element={<Trainings />} />
+          <Route path="/que-es-el-ultimate" element={<WhatIsUltimate />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>

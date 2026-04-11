@@ -1,40 +1,43 @@
-const pastTournaments = [
-  {
-    id: 1,
-    name: 'Copa Mediterránea',
-    date: '2024-03-12',
-    location: 'Alicante',
-    result: 'Campeones',
-    image: 'https://images.unsplash.com/photo-1585953074472-169dd16e1590?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  },
-  {
-    id: 2,
-    name: 'Open de Valencia',
-    date: '2023-11-25',
-    location: 'Valencia',
-    result: 'Semifinalistas',
-    image: 'https://images.unsplash.com/photo-1585953074472-169dd16e1590?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  },
-];
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const futureTournaments = [
-  {
-    id: 3,
-    name: 'Torneo Costa Blanca',
-    date: '2025-05-18',
-    location: 'Benidorm',
-    image: 'https://images.unsplash.com/photo-1585953074472-169dd16e1590?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  },
-  {
-    id: 4,
-    name: 'Ultimate Summer Fest',
-    date: '2025-07-05',
-    location: 'Murcia',
-    image: 'https://images.unsplash.com/photo-1585953074472-169dd16e1590?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  },
-];
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+const BACKEND_BASE = API_BASE.replace(/\/api\/?$/, '');
+
+function buildImageSrc(url) {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  return `${BACKEND_BASE}${url}`;
+}
 
 function Tournaments() {
+  const [tournaments, setTournaments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetch = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/tournaments`);
+        if (mounted) setTournaments(res.data || []);
+      } catch (err) {
+        console.error('Failed to load tournaments', err);
+        if (mounted) setError('No se pudieron cargar los torneos.');
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+    fetch();
+    return () => { mounted = false; };
+  }, []);
+
+  if (isLoading) return <section className="section-shell"><div>Cargando torneos...</div></section>;
+  if (error) return <section className="section-shell"><div className="text-red-600">{error}</div></section>;
+
+  const future = tournaments.filter((t) => !!t.isFuture);
+  const past = tournaments.filter((t) => !t.isFuture);
+
   return (
     <section className="section-shell">
       <div className="section-heading">
@@ -47,16 +50,16 @@ function Tournaments() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-5">
-          {pastTournaments.map((tournament) => (
+          {past.map((tournament) => (
             <article key={tournament.id} className="panel-card overflow-hidden transition hover:-translate-y-1">
-              <img src={tournament.image} alt={tournament.name} className="h-64 w-full object-cover" />
+              {tournament.imageUrl && <img src={buildImageSrc(tournament.imageUrl)} alt={tournament.name} className="h-64 w-full object-cover" loading="lazy" onError={(ev) => { ev.currentTarget.style.display = 'none'; }} />}
               <div className="p-6">
                 <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-700">
                   Pasado
                 </span>
                 <h3 className="mt-4 text-2xl font-semibold text-slate-950">{tournament.name}</h3>
-                <p className="mt-2 text-slate-600">{tournament.location} · {tournament.date}</p>
-                <p className="mt-4 text-slate-700">Resultado: {tournament.result}</p>
+                <p className="mt-2 text-slate-600">{tournament.location} · {tournament.date ? new Date(tournament.date).toLocaleDateString() : ''}</p>
+                {tournament.result && <p className="mt-4 text-slate-700">Resultado: {tournament.result}</p>}
               </div>
             </article>
           ))}
@@ -69,17 +72,17 @@ function Tournaments() {
             <p className="mt-4 text-slate-600">No te pierdas las competiciones más importantes, nuestra preparación y el espíritu del equipo en cada partido.</p>
           </div>
 
-          {futureTournaments.map((tournament) => (
+          {future.map((tournament) => (
             <article key={tournament.id} className="panel-card overflow-hidden transition hover:-translate-y-1">
               <div className="grid gap-4 sm:grid-cols-[1fr_1.4fr]">
-                <img src={tournament.image} alt={tournament.name} className="h-40 w-full object-cover sm:h-full" />
+                {tournament.imageUrl && <img src={buildImageSrc(tournament.imageUrl)} alt={tournament.name} className="h-40 w-full object-cover sm:h-full" loading="lazy" onError={(ev) => { ev.currentTarget.style.display = 'none'; }} />}
                 <div className="p-6">
                   <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-700">
                     Próximo
                   </span>
                   <h4 className="mt-4 text-2xl font-semibold text-slate-950">{tournament.name}</h4>
                   <p className="mt-2 text-slate-600">{tournament.location}</p>
-                  <p className="mt-4 text-slate-700">Fecha: {tournament.date}</p>
+                  <p className="mt-4 text-slate-700">Fecha: {tournament.date ? new Date(tournament.date).toLocaleDateString() : ''}</p>
                 </div>
               </div>
             </article>

@@ -7,6 +7,8 @@ const tournamentRoutes = require('./routes/tournaments');
 const achievementRoutes = require('./routes/achievements');
 const sponsorRoutes = require('./routes/sponsors');
 const newsRoutes = require('./routes/news');
+const eventRoutes = require('./routes/events');
+const trainingRoutes = require('./routes/trainings');
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ app.use('/api/tournaments', tournamentRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/sponsors', sponsorRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/trainings', trainingRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ message: 'Benidisc API ready.' });

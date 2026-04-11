@@ -34,6 +34,60 @@ benidisc/
 └── README.md
 ```
 
+## Arquitectura
+
+```mermaid
+flowchart LR
+   Browser[User Browser]
+
+   subgraph Frontend [Frontend — React (Vite + Tailwind)]
+      direction TB
+      App[App.jsx]
+      Home[Home.jsx]
+      Achievements[Achievements.jsx]
+      Tournaments[Tournaments.jsx]
+      AdminPage[Admin.jsx (stores token in localStorage)]
+   end
+
+   subgraph Backend [Backend — Node.js + Express]
+      direction TB
+      Express[Express server (backend/index.js)]
+      Routes[API routes (/api/*) (auth, tournaments, achievements, sponsors, news)]
+      AuthController[Auth Controller (/api/auth)]
+      AuthMiddleware[authenticateToken (JWT) middleware]
+      UploadMiddleware[upload (multer) middleware]
+      Controllers[Controllers (CRUD handlers)]
+      Prisma[Prisma Client]
+      DB[SQLite DB]
+      Static[Static files: frontend/dist & /uploads]
+      UploadsFolder[uploads/ (saved files)]
+   end
+
+   Browser --> App
+   App --> Home
+   App --> Achievements
+   App --> Tournaments
+   App --> AdminPage
+
+   Home -->|GET /api/news| Routes
+   Achievements -->|GET /api/achievements| Routes
+   Tournaments -->|GET /api/tournaments| Routes
+
+   AdminPage -->|POST /api/auth/login (email/password)| AuthController
+   AuthController -->|returns JWT| AdminPage
+   AdminPage -->|POST/PUT/DELETE (multipart + Authorization header)| Routes
+
+   Routes --> Controllers
+   Routes --> AuthMiddleware
+   Routes --> UploadMiddleware
+   Controllers --> Prisma
+   Prisma --> DB
+   UploadMiddleware --> UploadsFolder
+   Express --> Static
+   Routes --> Static
+
+```
+
 ## Backend
 
 ### APIs disponibles

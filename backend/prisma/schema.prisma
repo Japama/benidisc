@@ -58,3 +58,26 @@ model News {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  date        DateTime
+  location    String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TrainingSchedule {
+  id           Int      @id @default(autoincrement())
+  dayOfWeek    String
+  startTime    String
+  endTime      String
+  location     String
+  mapUrl       String?
+  requirements String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

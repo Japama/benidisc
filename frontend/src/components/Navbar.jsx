@@ -4,6 +4,9 @@ import Logo from './Logo';
 
 const links = [
   { to: '/', label: 'Inicio' },
+  { to: '/que-es-el-ultimate', label: 'Qué es el Ultimate' },
+  { to: '/entrenamientos', label: 'Entrenamientos' },
+  { to: '/eventos', label: 'Eventos' },
   { to: '/achievements', label: 'Palmarés' },
   { to: '/tournaments', label: 'Torneos' },
   { to: '/admin', label: 'Admin' },
