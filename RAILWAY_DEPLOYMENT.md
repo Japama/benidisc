@@ -8,6 +8,31 @@
    - `JWT_SECRET`: Genera una clave segura (ej: `openssl rand -base64 32`)
    - `NODE_ENV`: `production`
 
+   ### Opción A — Crear admin automáticamente en el primer arranque (recomendado)
+
+   Si prefieres que el admin se cree automáticamente al arrancar la app en Railway, añade estas variables de entorno adicionales al servicio backend:
+
+   - `ADMIN_EMAIL` — email del administrador (ej: `admin@benidisc.com`)
+   - `ADMIN_PASSWORD` — contraseña inicial del administrador (cámbiala después del primer login)
+
+   Ejemplo (Railway CLI):
+
+   ```bash
+   # Usa tu connection string real en lugar de <YOUR_DATABASE_URL>
+   railway variables set DATABASE_URL "<YOUR_DATABASE_URL>"
+   railway variables set JWT_SECRET "<YOUR_JWT_SECRET>"
+   railway variables set ADMIN_EMAIL "admin@benidisc.com"
+   railway variables set ADMIN_PASSWORD "Benidisc2026!"
+   ```
+
+   Luego redeploy/reinicia el servicio (`railway up` o mediante la UI). En los logs deberías ver un mensaje parecido a:
+
+   ```
+   Admin user created on startup: admin@benidisc.com
+   ```
+
+   Nota de seguridad: después del primer arranque considera remover `ADMIN_PASSWORD` de las variables de entorno o cambiarla por una contraseña segura desde el panel de administración.
+
 3. **Build Command**: `cd frontend && npm run build`
 4. **Start Command**: `cd backend && npm start`
 
