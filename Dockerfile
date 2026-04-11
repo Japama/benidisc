@@ -21,5 +21,5 @@ WORKDIR /app/backend
 RUN npm ci --production
 
 # Expose port and start backend
-EXPOSE 3000
+EXPOSE 4000
 CMD ["npm", "start"]

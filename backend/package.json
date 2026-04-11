@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
+    "start": "npx prisma generate && npx prisma db push && node index.js",
     "prisma": "prisma",
     "seed": "node seed.js",
     "build": "cd ../frontend && npm run build"

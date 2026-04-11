@@ -3,7 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  // Use PostgreSQL in production. Set `DATABASE_URL` in your environment (Railway provides one).
+  // For local development you can use a local Postgres or switch to SQLite by adjusting this file.
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
