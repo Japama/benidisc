@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
-const BACKEND_BASE = API_BASE.replace(/\/api\/?$/, '');
-
-function buildImageSrc(url) {
-  if (!url) return null;
-  if (url.startsWith('http')) return url;
-  return `${BACKEND_BASE}${url}`;
-}
+import { API_BASE, buildImageSrc } from '../lib/api';
 
 function Tournaments() {
   const [tournaments, setTournaments] = useState([]);

@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
-const BACKEND_BASE = API_BASE.replace(/\/api\/?$/, '');
-
-function buildImageSrc(url) {
-  if (!url) return null;
-  if (url.startsWith('http')) return url;
-  return `${BACKEND_BASE}${url}`;
-}
+import { API_BASE, buildImageSrc } from '../lib/api';
 
 function Home() {
   const [news, setNews] = useState([]);
@@ -17,9 +9,13 @@ function Home() {
     const fetchNews = async () => {
       try {
         const response = await axios.get(`${API_BASE}/news`);
-        setNews(response.data);
+        const d = response.data;
+        if (Array.isArray(d)) setNews(d);
+        else if (d && typeof d === 'object' && (d.id || d.title)) setNews([d]);
+        else setNews([]);
       } catch (error) {
         console.error('Error cargando novedades:', error);
+        setNews([]);
       }
     };
 
