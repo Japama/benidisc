@@ -16,15 +16,15 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 border-b border-slate-200 backdrop-blur">
+    <header className="sticky top-0 z-30 bg-primary-800/95 border-b border-primary-700/30 backdrop-blur-sm text-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <div className="flex items-center gap-3">
           <Logo />
-          <p className="text-xs uppercase tracking-[0.26em] text-slate-500">Ultimate Frisbee Club</p>
+          <p className="text-xs uppercase tracking-[0.26em] text-primary-100">Ultimate Frisbee Club</p>
         </div>
 
         <button
-          className="md:hidden rounded-2xl border border-slate-200 bg-white p-3 text-slate-700 transition hover:border-cyan-400 hover:text-cyan-900"
+          className="md:hidden rounded-2xl border border-primary-700/30 bg-primary-700/40 p-3 text-white transition hover:bg-primary-700/60"
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label="Abrir menú"
         >
@@ -32,7 +32,7 @@ function Navbar() {
         </button>
 
         <nav
-          className={`absolute inset-x-4 top-full mt-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-200/60 transition-all duration-200 md:static md:block md:max-w-none md:translate-y-0 md:bg-transparent md:border-0 md:p-0 ${
+          className={`absolute inset-x-4 top-full mt-3 rounded-3xl border border-primary-700/30 bg-primary-800 p-4 shadow-2xl shadow-primary-900/5 transition-all duration-200 md:static md:block md:max-w-none md:translate-y-0 md:bg-transparent md:border-0 md:p-0 ${
             isOpen ? 'block' : 'hidden'
           }`}
         >
@@ -44,8 +44,8 @@ function Navbar() {
                   className={({ isActive }) =>
                     `inline-block rounded-2xl px-4 py-2 text-sm font-medium transition ${
                       isActive
-                        ? 'bg-cyan-500/15 text-cyan-900 shadow-inner shadow-cyan-200/40'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'bg-accent-400 text-slate-900 shadow-md'
+                        : 'text-white hover:text-accent-100 hover:bg-primary-700/40'
                     }`
                   }
                   onClick={() => setIsOpen(false)}
